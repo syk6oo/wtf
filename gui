@@ -72,6 +72,7 @@ if library.theme.cursor and Drawing then
 end
 
 function library:CreateWatermark(name, position)
+        print("CreateWatermark uruchomione!")  -- Sprawdzenie, czy funkcja działa
     local gamename = marketplaceservice:GetProductInfo(game.PlaceId).Name
     local watermark = { }
     watermark.Visible = true
