@@ -87,7 +87,7 @@ function library:CreateWatermark(name, position)
         getgenv().watermark:Remove()
     end
     getgenv().watermark = watermark.main
-    
+
     watermark.mainbar = Instance.new("Frame", watermark.main)
     watermark.mainbar.Name = "Main"
     watermark.mainbar.BorderColor3 = Color3.fromRGB(80, 80, 80)
@@ -101,38 +101,6 @@ function library:CreateWatermark(name, position)
     watermark.Gradient.Rotation = 90
     watermark.Gradient.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0.00, Color3.fromRGB(40, 40, 40)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(10, 10, 10)) })
 
-    watermark.Outline = Instance.new("Frame", watermark.mainbar)
-    watermark.Outline.Name = "outline"
-    watermark.Outline.ZIndex = 4
-    watermark.Outline.BorderSizePixel = 0
-    watermark.Outline.Visible = watermark.Visible
-    watermark.Outline.BackgroundColor3 = library.theme.outlinecolor
-    watermark.Outline.Position = UDim2.fromOffset(-1, -1)
-
-    watermark.BlackOutline = Instance.new("Frame", watermark.mainbar)
-    watermark.BlackOutline.Name = "blackline"
-    watermark.BlackOutline.ZIndex = 3
-    watermark.BlackOutline.BorderSizePixel = 0
-    watermark.BlackOutline.BackgroundColor3 = library.theme.outlinecolor2
-    watermark.BlackOutline.Visible = watermark.Visible
-    watermark.BlackOutline.Position = UDim2.fromOffset(-2, -2)
-
-    watermark.label = Instance.new("TextLabel", watermark.mainbar)
-    watermark.label.Name = "FPSLabel"
-    watermark.label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    watermark.label.BackgroundTransparency = 1.000
-    watermark.label.Position = UDim2.new(0, 0, 0, 0)
-    watermark.label.Size = UDim2.new(0, 238, 0, 25)
-    watermark.label.Font = library.theme.font
-    watermark.label.ZIndex = 6
-    watermark.label.Visible = watermark.Visible
-    watermark.label.Text = watermark.text
-    watermark.label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    watermark.label.TextSize = 15
-    watermark.label.TextStrokeTransparency = 0.000
-    watermark.label.TextXAlignment = Enum.TextXAlignment.Left
-    watermark.label.Size = UDim2.new(0, watermark.label.TextBounds.X+10, 0, 25)
-    
     watermark.topbar = Instance.new("Frame", watermark.mainbar)
     watermark.topbar.Name = "TopBar"
     watermark.topbar.ZIndex = 6
@@ -140,9 +108,17 @@ function library:CreateWatermark(name, position)
     watermark.topbar.BorderSizePixel = 0
     watermark.topbar.Visible = watermark.Visible
     watermark.topbar.Size = UDim2.new(0, 0, 0, 1)
-    
-    -- Ręcznie wymusza zmianę koloru na deep red po utworzeniu watermarka
+
+    -- Po utworzeniu watermarka natychmiast aktualizujemy jego kolor
     watermark:UpdateTheme(library.theme)
+
+    function watermark:UpdateTheme(theme)
+        theme = theme or library.theme
+        watermark.topbar.BackgroundColor3 = theme.accentcolor
+    end
+
+    return watermark
+end
 
     watermark.mainbar.Size = UDim2.new(0, watermark.label.TextBounds.X, 0, 25)
     watermark.topbar.Size = UDim2.new(0, watermark.label.TextBounds.X+6, 0, 1)
