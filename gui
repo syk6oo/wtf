@@ -126,14 +126,14 @@ function library:CreateWatermark(name, position)
     watermark.topbar = Instance.new("Frame", watermark.mainbar)
     watermark.topbar.Name = "TopBar"
     watermark.topbar.ZIndex = 6
-    watermark.topbar.BackgroundColor3 = library.theme.accentcolor
-    print("Kolor accentcolor przed watermark:", library.theme.accentcolor)  
+    watermark.topbar.BackgroundColor3 = library.theme.accentcolor  
     watermark.topbar.BorderSizePixel = 0
     watermark.topbar.Visible = watermark.Visible
     watermark.topbar.Size = UDim2.new(0, watermark.label.TextBounds.X+6, 0, 1)
 
     -- Aktualizacja kolorów watermarka
     function watermark:UpdateTheme(theme)
+        print("UpdateTheme wywołane!")  -- Sprawdzenie, czy funkcja działa
         theme = theme or library.theme
         watermark.Outline.BackgroundColor3 = theme.outlinecolor
         watermark.BlackOutline.BackgroundColor3 = theme.outlinecolor2
@@ -143,6 +143,7 @@ function library:CreateWatermark(name, position)
 
     -- Od razu zastosuj nowy motyw
     watermark:UpdateTheme(library.theme)
+    watermark.topbar.BackgroundColor3 = Color3.fromRGB(153, 0, 0) -- Deep Red
 
     -- Obsługa FPS w watermarku
     local startTime, counter, oldfps = os.clock(), 0, nil
