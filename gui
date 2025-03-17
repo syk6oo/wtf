@@ -140,6 +140,9 @@ function library:CreateWatermark(name, position)
     watermark.topbar.BorderSizePixel = 0
     watermark.topbar.Visible = watermark.Visible
     watermark.topbar.Size = UDim2.new(0, 0, 0, 1)
+    
+    -- Ręcznie wymusza zmianę koloru na deep red po utworzeniu watermarka
+    watermark:UpdateTheme(library.theme)
 
     watermark.mainbar.Size = UDim2.new(0, watermark.label.TextBounds.X, 0, 25)
     watermark.topbar.Size = UDim2.new(0, watermark.label.TextBounds.X+6, 0, 1)
@@ -203,12 +206,12 @@ function library:CreateWatermark(name, position)
         tweenservice:Create(watermark.BlackOutline, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), { BackgroundTransparency = 0, Active = true }):Play()
     end)
 
-    function watermark:UpdateTheme(theme)
+    function watermark:UpdateTheme(theme) 
         theme = theme or library.theme
         watermark.Outline.BackgroundColor3 = theme.outlinecolor
         watermark.BlackOutline.BackgroundColor3 = theme.outlinecolor2
         watermark.label.Font = theme.font
-        watermark.topbar.BackgroundColor3 = theme.accentcolor
+        watermark.topbar.BackgroundColor3 = theme.accentcolor  -- Tu zmienia kolor
     end
 
     return watermark
