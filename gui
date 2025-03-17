@@ -26,24 +26,23 @@ library.theme = {
     tilesize = 90,
     cursor = false,
     cursorimg = "https://t0.rbxcdn.com/42f66da98c40252ee151326a82aab51f",
-    backgroundcolor = Color3.fromRGB(30, 0, 0),  -- Ciemne tło czerwone
-    tabstextcolor = Color3.fromRGB(255, 50, 50), -- Jasnoczerwony tekst
-    bordercolor = Color3.fromRGB(100, 0, 0),  -- Czerwone ramki
-    accentcolor = Color3.fromRGB(153, 0, 0),  -- Deep Red (Główny kolor GUI)
-    accentcolor2 = Color3.fromRGB(120, 0, 0),  
-    outlinecolor = Color3.fromRGB(102, 0, 0),  -- Outline czerwony
-    outlinecolor2 = Color3.fromRGB(70, 0, 0),  
-    sectorcolor = Color3.fromRGB(90, 0, 0),  
-    toptextcolor = Color3.fromRGB(255, 50, 50), -- Jasnoczerwony tekst w górnej belce
+    backgroundcolor = Color3.fromRGB(20, 20, 20),
+    tabstextcolor = Color3.fromRGB(240, 240, 240),
+    bordercolor = Color3.fromRGB(60, 60, 60),
+    accentcolor = Color3.fromRGB(28, 56, 139),
+    accentcolor2 = Color3.fromRGB(16, 31, 78),
+    outlinecolor = Color3.fromRGB(60, 60, 60),
+    outlinecolor2 = Color3.fromRGB(0, 0, 0),
+    sectorcolor = Color3.fromRGB(30, 30, 30),
+    toptextcolor = Color3.fromRGB(255, 255, 255),
     topheight = 48,
-    topcolor = Color3.fromRGB(60, 0, 0),  
-    topcolor2 = Color3.fromRGB(50, 0, 0),  
-    buttoncolor = Color3.fromRGB(140, 0, 0),  -- Czerwone przyciski
-    buttoncolor2 = Color3.fromRGB(120, 0, 0),  
-    itemscolor = Color3.fromRGB(255, 100, 100),  -- Jasne czerwone elementy
-    itemscolor2 = Color3.fromRGB(255, 80, 80)  
+    topcolor = Color3.fromRGB(30, 30, 30),
+    topcolor2 = Color3.fromRGB(30, 30, 30),
+    buttoncolor = Color3.fromRGB(49, 49, 49),
+    buttoncolor2 = Color3.fromRGB(39, 39, 39),
+    itemscolor = Color3.fromRGB(200, 200, 200),
+    itemscolor2 = Color3.fromRGB(210, 210, 210)
 }
-
 
 if library.theme.cursor and Drawing then
     local success = pcall(function() 
@@ -98,20 +97,16 @@ function library:CreateWatermark(name, position)
     watermark.mainbar.Position = UDim2.new(0, position and position.X or 10, 0, position and position.Y or 10)
     watermark.mainbar.Size = UDim2.new(0, 0, 0, 25)
 
-    -- Wyłączamy gradient
--- watermark.Gradient = Instance.new("UIGradient", watermark.mainbar)
--- watermark.Gradient.Rotation = 90
--- watermark.Gradient.Color = ColorSequence.new({ 
---     ColorSequenceKeypoint.new(0.00, Color3.fromRGB(40, 40, 40)), 
---     ColorSequenceKeypoint.new(1.00, Color3.fromRGB(10, 10, 10)) 
--- })
+    watermark.Gradient = Instance.new("UIGradient", watermark.mainbar)
+    watermark.Gradient.Rotation = 90
+    watermark.Gradient.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0.00, Color3.fromRGB(40, 40, 40)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(10, 10, 10)) })
 
     watermark.Outline = Instance.new("Frame", watermark.mainbar)
     watermark.Outline.Name = "outline"
     watermark.Outline.ZIndex = 4
     watermark.Outline.BorderSizePixel = 0
     watermark.Outline.Visible = watermark.Visible
-    watermark.Outline.BackgroundColor3 = Color3.fromRGB(153, 0, 0)  -- Wymuszenie deep red
+    watermark.Outline.BackgroundColor3 = library.theme.outlinecolor
     watermark.Outline.Position = UDim2.fromOffset(-1, -1)
 
     watermark.BlackOutline = Instance.new("Frame", watermark.mainbar)
@@ -124,7 +119,7 @@ function library:CreateWatermark(name, position)
 
     watermark.label = Instance.new("TextLabel", watermark.mainbar)
     watermark.label.Name = "FPSLabel"
-    watermark.label.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    watermark.label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     watermark.label.BackgroundTransparency = 1.000
     watermark.label.Position = UDim2.new(0, 0, 0, 0)
     watermark.label.Size = UDim2.new(0, 238, 0, 25)
@@ -132,7 +127,7 @@ function library:CreateWatermark(name, position)
     watermark.label.ZIndex = 6
     watermark.label.Visible = watermark.Visible
     watermark.label.Text = watermark.text
-    watermark.label.TextColor3 = Color3.fromRGB(255, 0, 0)
+    watermark.label.TextColor3 = Color3.fromRGB(255, 255, 255)
     watermark.label.TextSize = 15
     watermark.label.TextStrokeTransparency = 0.000
     watermark.label.TextXAlignment = Enum.TextXAlignment.Left
@@ -210,12 +205,15 @@ function library:CreateWatermark(name, position)
 
     function watermark:UpdateTheme(theme)
         theme = theme or library.theme
-        watermark.Outline.BackgroundColor3 = Color3.fromRGB(153, 0, 0)  -- Deep Red
-        watermark.BlackOutline.BackgroundColor3 = Color3.fromRGB(102, 0, 0)  -- Ciemniejsza czerwień
+        watermark.Outline.BackgroundColor3 = theme.outlinecolor
+        watermark.BlackOutline.BackgroundColor3 = theme.outlinecolor2
         watermark.label.Font = theme.font
-        watermark.topbar.BackgroundColor3 = Color3.fromRGB(153, 0, 0)  -- Deep Red dla paska
+        watermark.topbar.BackgroundColor3 = theme.accentcolor
     end
-    
+
+    return watermark
+end
+
 function library:CreateWindow(name, size, hidebutton)
     local window = { }
 
@@ -843,7 +841,7 @@ function library:CreateWindow(name, size, hidebutton)
                 toggle.Label = Instance.new("TextButton", toggle.Main)
                 toggle.Label.Name = "Label"
                 toggle.Label.AutoButtonColor = false
-                toggle.Label.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+                toggle.Label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
                 toggle.Label.BackgroundTransparency = 1
                 toggle.Label.Position = UDim2.fromOffset(toggle.Main.AbsoluteSize.X + 10, -2)
                 toggle.Label.Size = UDim2.fromOffset(sector.Main.Size.X.Offset - 71, toggle.BlackOutline.Size.Y.Offset)
