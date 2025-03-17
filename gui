@@ -107,7 +107,7 @@ function library:CreateWatermark(name, position)
     watermark.Outline.ZIndex = 4
     watermark.Outline.BorderSizePixel = 0
     watermark.Outline.Visible = watermark.Visible
-    watermark.Outline.BackgroundColor3 = library.theme.outlinecolor
+    watermark.Outline.BackgroundColor3 = Color3.fromRGB(153, 0, 0)  -- Wymuszenie deep red
     watermark.Outline.Position = UDim2.fromOffset(-1, -1)
 
     watermark.BlackOutline = Instance.new("Frame", watermark.mainbar)
@@ -206,15 +206,12 @@ function library:CreateWatermark(name, position)
 
     function watermark:UpdateTheme(theme)
         theme = theme or library.theme
-        watermark.Outline.BackgroundColor3 = theme.outlinecolor
-        watermark.BlackOutline.BackgroundColor3 = theme.outlinecolor2
+        watermark.Outline.BackgroundColor3 = Color3.fromRGB(153, 0, 0)  -- Deep Red
+        watermark.BlackOutline.BackgroundColor3 = Color3.fromRGB(102, 0, 0)  -- Ciemniejsza czerwień
         watermark.label.Font = theme.font
-        watermark.topbar.BackgroundColor3 = theme.accentcolor
+        watermark.topbar.BackgroundColor3 = Color3.fromRGB(153, 0, 0)  -- Deep Red dla paska
     end
-
-    return watermark
-end
-
+    
 function library:CreateWindow(name, size, hidebutton)
     local window = { }
 
