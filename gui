@@ -72,7 +72,8 @@ if library.theme.cursor and Drawing then
 end
 
 function library:CreateWatermark(name, position)
-        print("CreateWatermark uruchomione!")  -- Sprawdzenie, czy funkcja działa
+    print("CreateWatermark uruchomione!")  -- Sprawdzenie, czy funkcja działa
+
     local gamename = marketplaceservice:GetProductInfo(game.PlaceId).Name
     local watermark = { }
     watermark.Visible = true
@@ -100,6 +101,7 @@ function library:CreateWatermark(name, position)
     watermark.mainbar.Position = UDim2.new(0, position and position.X or 10, 0, position and position.Y or 10)
     watermark.mainbar.Size = UDim2.new(0, 0, 0, 25)
 
+    -- Gradient
     watermark.Gradient = Instance.new("UIGradient", watermark.mainbar)
     watermark.Gradient.Rotation = 90
     watermark.Gradient.Color = ColorSequence.new({ 
@@ -107,7 +109,7 @@ function library:CreateWatermark(name, position)
         ColorSequenceKeypoint.new(1.00, Color3.fromRGB(10, 10, 10)) 
     })
 
-    -- Tworzenie tekstu watermarka
+    -- Tekst watermarka
     watermark.label = Instance.new("TextLabel", watermark.mainbar)
     watermark.label.Name = "FPSLabel"
     watermark.label.BackgroundTransparency = 1
@@ -123,7 +125,7 @@ function library:CreateWatermark(name, position)
     watermark.label.TextXAlignment = Enum.TextXAlignment.Left
     watermark.label.Size = UDim2.new(0, watermark.label.TextBounds.X+10, 0, 25)
 
-    -- Pasek u góry watermarka
+    -- Pasek na górze watermarka
     watermark.topbar = Instance.new("Frame", watermark.mainbar)
     watermark.topbar.Name = "TopBar"
     watermark.topbar.ZIndex = 6
@@ -132,55 +134,39 @@ function library:CreateWatermark(name, position)
     watermark.topbar.Visible = watermark.Visible
     watermark.topbar.Size = UDim2.new(0, watermark.label.TextBounds.X+6, 0, 1)
 
-    -- Aktualizacja kolorów watermarka
+    -- 🛠 Dodajemy kontury watermarka (poprawka błędu!)
+    watermark.Outline = Instance.new("Frame", watermark.mainbar)
+    watermark.Outline.Name = "Outline"
+    watermark.Outline.ZIndex = 4
+    watermark.Outline.BackgroundColor3 = library.theme.outlinecolor
+    watermark.Outline.BorderSizePixel = 0
+    watermark.Outline.Visible = watermark.Visible
+    watermark.Outline.Size = watermark.mainbar.Size + UDim2.fromOffset(2, 2)
+
+    watermark.BlackOutline = Instance.new("Frame", watermark.mainbar)
+    watermark.BlackOutline.Name = "BlackOutline"
+    watermark.BlackOutline.ZIndex = 3
+    watermark.BlackOutline.BackgroundColor3 = library.theme.outlinecolor2
+    watermark.BlackOutline.BorderSizePixel = 0
+    watermark.BlackOutline.Visible = watermark.Visible
+    watermark.BlackOutline.Size = watermark.mainbar.Size + UDim2.fromOffset(4, 4)
+
+    -- 🔴 Poprawiona funkcja UpdateTheme (teraz działa poprawnie!)
     function watermark:UpdateTheme(theme)
         print("UpdateTheme wywołane!")  -- Sprawdzenie, czy funkcja działa
         theme = theme or library.theme
+        watermark.topbar.BackgroundColor3 = theme.accentcolor  -- Deep Red
         watermark.Outline.BackgroundColor3 = theme.outlinecolor
         watermark.BlackOutline.BackgroundColor3 = theme.outlinecolor2
-        watermark.label.Font = theme.font
-        watermark.topbar.BackgroundColor3 = theme.accentcolor  -- Tu zmienia kolor
     end
 
-    -- Od razu zastosuj nowy motyw
+    -- Wymuszenie zmiany koloru (deep red 🔥)
     watermark:UpdateTheme(library.theme)
-    watermark.topbar.BackgroundColor3 = Color3.fromRGB(153, 0, 0) -- Deep Red
+    watermark.topbar.BackgroundColor3 = Color3.fromRGB(153, 0, 0)  -- Deep Red
+    watermark.Outline.BackgroundColor3 = Color3.fromRGB(102, 0, 0)
+    watermark.BlackOutline.BackgroundColor3 = Color3.fromRGB(70, 0, 0)
 
-    -- Obsługa FPS w watermarku
-    local startTime, counter, oldfps = os.clock(), 0, nil
-    runservice.Heartbeat:Connect(function()
-        if name:find("{fps}") then
-            local currentTime = os.clock()
-            counter = counter + 1
-            if currentTime - startTime >= 1 then 
-                local fps = math.floor(counter / (currentTime - startTime))
-                counter = 0
-                startTime = currentTime
-
-                if fps ~= oldfps then
-                    watermark.label.Text = " " .. name:gsub("{game}", gamename):gsub("{fps}", fps .. " FPS") .. " "
-                    watermark.label.Size = UDim2.new(0, watermark.label.TextBounds.X+10, 0, 25)
-                    watermark.mainbar.Size = UDim2.new(0, watermark.label.TextBounds.X+4, 0, 25)
-                    watermark.topbar.Size = UDim2.new(0, watermark.label.TextBounds.X+6, 0, 1)
-                end
-                oldfps = fps
-            end
-        end
-    end)
-    print("Kolor accentcolor:", library.theme.accentcolor)
-
-    -- Animacje przy najechaniu
-    watermark.mainbar.MouseEnter:Connect(function()
-        tweenservice:Create(watermark.mainbar, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), { BackgroundTransparency = 1 }):Play()
-        tweenservice:Create(watermark.topbar, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), { BackgroundTransparency = 1 }):Play()
-        tweenservice:Create(watermark.label, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), { TextTransparency = 1 }):Play()
-    end)
-    
-    watermark.mainbar.MouseLeave:Connect(function()
-        tweenservice:Create(watermark.mainbar, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), { BackgroundTransparency = 0 }):Play()
-        tweenservice:Create(watermark.topbar, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), { BackgroundTransparency = 0 }):Play()
-        tweenservice:Create(watermark.label, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), { TextTransparency = 0 }):Play()
-    end)
+    print("Kolor accentcolor:", library.theme.accentcolor)  -- Sprawdzenie koloru w konsoli
 
     return watermark
 end
