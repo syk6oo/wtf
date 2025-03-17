@@ -127,6 +127,7 @@ function library:CreateWatermark(name, position)
     watermark.topbar.Name = "TopBar"
     watermark.topbar.ZIndex = 6
     watermark.topbar.BackgroundColor3 = library.theme.accentcolor
+    print("Kolor accentcolor przed watermark:", library.theme.accentcolor)  
     watermark.topbar.BorderSizePixel = 0
     watermark.topbar.Visible = watermark.Visible
     watermark.topbar.Size = UDim2.new(0, watermark.label.TextBounds.X+6, 0, 1)
@@ -164,6 +165,7 @@ function library:CreateWatermark(name, position)
             end
         end
     end)
+    print("Kolor accentcolor:", library.theme.accentcolor)
 
     -- Animacje przy najechaniu
     watermark.mainbar.MouseEnter:Connect(function()
